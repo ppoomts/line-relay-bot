@@ -1,4 +1,7 @@
 import os
+import discord
+import requests
+
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 AIO_USERNAME = os.getenv("AIO_USERNAME")
@@ -38,4 +41,5 @@ async def on_message(message):
         await message.channel.send("รีเลย์ปิดแล้ว ❌")
 
 client.run(TOKEN)
+
 
