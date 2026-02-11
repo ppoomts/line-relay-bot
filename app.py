@@ -2,7 +2,7 @@ import discord
 import requests
 import os
 
-TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.GUgsPL.BOqE3jOSjcN-hQvUjzTyI3ZFhT0sCO1tMULC0k"
+TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.G7Y0sv.ws15uBsF1S3CS_oKt0EJcA5f1LodlhGfMqC7co"
 
 AIO_USERNAME = "ppom_ts"
 AIO_KEY = "aio_OOGC63arpHjJiBdG5dKVLgYdjPaY"
@@ -41,3 +41,4 @@ async def on_message(message):
         await message.channel.send("รีเลย์ปิดแล้ว ❌")
 
 client.run(TOKEN)
+
