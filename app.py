@@ -1,15 +1,16 @@
-from flask import Flask, request
+import discord
 import requests
 import os
 
-app = Flask(__name__)
+TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.GUgsPL.BOqE3jOSjcN-hQvUjzTyI3ZFhT0sCO1tMULC0k"
 
-CHANNEL_ACCESS_TOKEN = "ใส่_CHANNEL_ACCESS_TOKEN"
-CHANNEL_SECRET = "ใส่_CHANNEL_SECRET"
-
-AIO_USERNAME = "ใส่_USERNAME"
-AIO_KEY = "ใส่_AIO_KEY"
+AIO_USERNAME = "ppom_ts"
+AIO_KEY = "aio_OOGC63arpHjJiBdG5dKVLgYdjPaY"
 FEED_NAME = "fear"
+
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 def send_to_adafruit(value):
     url = f"https://io.adafruit.com/api/v2/{AIO_USERNAME}/feeds/{FEED_NAME}/data"
@@ -20,40 +21,23 @@ def send_to_adafruit(value):
     data = {"value": value}
     requests.post(url, json=data, headers=headers)
 
-def reply_message(reply_token, text):
-    url = "https://api.line.me/v2/bot/message/reply"
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {CHANNEL_ACCESS_TOKEN}"
-    }
-    data = {
-        "replyToken": reply_token,
-        "messages": [{"type": "text", "text": text}]
-    }
-    requests.post(url, json=data, headers=headers)
+@client.event
+async def on_ready():
+    print(f"Logged in as {client.user}")
 
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    body = request.json
-    events = body.get("events", [])
-    
-    for event in events:
-        if event["type"] == "message":
-            user_message = event["message"]["text"].upper()
-            reply_token = event["replyToken"]
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
 
-            if user_message == "ON":
-                send_to_adafruit("ON")
-                reply_message(reply_token, "รีเลย์เปิดแล้ว ✅")
+    msg = message.content.lower()
 
-            elif user_message == "OFF":
-                send_to_adafruit("OFF")
-                reply_message(reply_token, "รีเลย์ปิดแล้ว ❌")
+    if msg == "!on":
+        send_to_adafruit("ON")
+        await message.channel.send("รีเลย์เปิดแล้ว ✅")
 
-            else:
-                reply_message(reply_token, "พิมพ์ ON หรือ OFF")
+    elif msg == "!off":
+        send_to_adafruit("OFF")
+        await message.channel.send("รีเลย์ปิดแล้ว ❌")
 
-    return "OK"
-
-if __name__ == "__main__":
-    app.run()
+client.run(TOKEN)
