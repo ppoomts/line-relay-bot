@@ -1,15 +1,15 @@
 import discord
 import requests
-import os
 
-TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.G7Y0sv.ws15uBsF1S3CS_oKt0EJcA5f1LodlhGfMqC7co"
+TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.GXfuXI.7202ITMXWyX9PmJdaQPw85LgvJJq0yTBr0BybA"
 
-AIO_USERNAME = "ppom_ts"
+AIO_USERNAME = "ppoom_ts"
 AIO_KEY = "aio_OOGC63arpHjJiBdG5dKVLgYdjPaY"
 FEED_NAME = "fear"
 
 intents = discord.Intents.default()
 intents.message_content = True
+
 client = discord.Client(intents=intents)
 
 def send_to_adafruit(value):
@@ -19,7 +19,8 @@ def send_to_adafruit(value):
         "Content-Type": "application/json"
     }
     data = {"value": value}
-    requests.post(url, json=data, headers=headers)
+    r = requests.post(url, json=data, headers=headers)
+    print("Status:", r.status_code)
 
 @client.event
 async def on_ready():
@@ -27,18 +28,15 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author == client.user:
+    if message.author.bot:
         return
 
-    msg = message.content.lower()
-
-    if msg == "!on":
+    if message.content == "!on":
         send_to_adafruit("ON")
         await message.channel.send("รีเลย์เปิดแล้ว ✅")
 
-    elif msg == "!off":
+    elif message.content == "!off":
         send_to_adafruit("OFF")
         await message.channel.send("รีเลย์ปิดแล้ว ❌")
 
 client.run(TOKEN)
-
