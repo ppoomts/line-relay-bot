@@ -1,11 +1,9 @@
-import discord
-import requests
+import os
 
-TOKEN = "MTQ3MDk5MjYzNzEyMDIxNzE3MA.GXfuXI.7202ITMXWyX9PmJdaQPw85LgvJJq0yTBr0BybA"
-
-AIO_USERNAME = "ppoom_ts"
-AIO_KEY = "aio_OOGC63arpHjJiBdG5dKVLgYdjPaY"
-FEED_NAME = "fear"
+TOKEN = os.getenv("DISCORD_TOKEN")
+AIO_USERNAME = os.getenv("AIO_USERNAME")
+AIO_KEY = os.getenv("AIO_KEY")
+FEED_NAME = os.getenv("FEED_NAME")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -40,3 +38,4 @@ async def on_message(message):
         await message.channel.send("รีเลย์ปิดแล้ว ❌")
 
 client.run(TOKEN)
+
